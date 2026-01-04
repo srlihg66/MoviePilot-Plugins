@@ -12,7 +12,6 @@ api_key = emby._apikey
 
 if not base_url or not api_key:
     logger.error("请配置 EMBY_HOST / EMBY_API_KEY")
-    return
 
 headers = {
     "X-Emby-Token": api_key
