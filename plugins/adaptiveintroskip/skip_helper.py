@@ -3,12 +3,9 @@ from app.log import logger
 from datetime import datetime
 from app.modules.emby.emby import Emby
 
-
-emby = Emby()
-
 # Emby API 地址和授权标头
-base_url = emby._host
-api_key = emby._apikey
+base_url = Emby._host
+api_key = Emby._apikey
 
 if not base_url or not api_key:
     logger.error("请配置 EMBY_HOST / EMBY_API_KEY")
