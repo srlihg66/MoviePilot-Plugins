@@ -63,5 +63,20 @@
       "v1.1.0": "域名改为可配置；统一API拼接；精简日志",
       "v1.0": "首次发布"
     }
-  }
+  },
+   "AdaptiveIntroSkip": {
+    "name": "自适应IntroSkip修复",
+    "description": "通过用户的暂停与播放动作，批量标记片头片尾",
+    "version": "1.7.7",
+    "v2": true,
+    "history": {
+      "v1.7": "fix: 新入库剧集标记片头的一些错误，如遇到问题请重置插件。",
+      "v1.6": "(火柴总定制版)",
+      "v1.5": "时间支持 分:秒 格式",
+      "v1.4": "增加用户事件筛选"
+    },
+    "icon": "https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/icons/chapter.png",
+    "author": "honue",
+    "level": 1
+  } 
 }
