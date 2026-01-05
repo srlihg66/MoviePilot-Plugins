@@ -2,7 +2,7 @@ import requests
 from app.log import logger
 from datetime import datetime
 
-def _get_headers(api_key)
+def _get_headers(api_key):
     return {'X-Emby-Token': api_key}  # ← api_key 有值，正常返回
 
 def format_time(seconds):
