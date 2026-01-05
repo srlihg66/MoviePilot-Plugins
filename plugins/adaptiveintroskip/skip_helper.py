@@ -1,8 +1,8 @@
 import requests
 from app.log import logger
 from datetime import datetime
- 
-def _get_headers(api_key: str) -> Dict[str, str]:
+
+def _get_headers(api_key: str)
     return {'X-Emby-Token': api_key}  # ← api_key 有值，正常返回
 
 def format_time(seconds):
