@@ -135,7 +135,7 @@ class AdaptiveIntroSkip(_PluginBase):
                                                           episode_id=event_info.episode_id, 
                                                           base_url=self._emby_host, 
                                                           api_key=self._emby_apikey)
-        total_sec = get_total_time(current_video_item_id)
+        total_sec = get_total_time(current_video_item_id, self._emby_host, self._emby_apikey)
         current_sec = int(current_percentage / 100 * total_sec)
 
         if self.trans_to_sec(begin_time) < current_sec < (total_sec - self.trans_to_sec(end_time)):
@@ -162,7 +162,7 @@ class AdaptiveIntroSkip(_PluginBase):
                 intro_end = self.trans_to_sec(begin_time) if manual else current_sec
                 # 批量标记之后的所有剧集，不影响已经看过的标记
                 for next_episode_id in next_episode_ids:
-                    update_intro(next_episode_id, intro_end, base_url, api_key)
+                    update_intro(next_episode_id, intro_end, self._emby_host, self._emby_apikey)
                 chapter_info['intro_end'] = intro_end
                 logger.info(
                     f"【恢复播放】{event_info.item_name} 后续剧集片头设置在 {int(intro_end / 60)}分{int(intro_end % 60)}秒 结束")
@@ -171,7 +171,7 @@ class AdaptiveIntroSkip(_PluginBase):
                     total_sec - self.trans_to_sec(end_time)) and event_info.event == 'playback.stop') or manual:
                 credits_start = (total_sec - self.trans_to_sec(end_time)) if manual else current_sec
                 for next_episode_id in next_episode_ids:
-                    update_credits(next_episode_id, credits_start, base_url, api_key)
+                    update_credits(next_episode_id, credits_start, self._emby_host, self._emby_apikey)
                 chapter_info['credits_start'] = credits_start
                 logger.info(
                     f"【退出播放】{event_info.item_name} 后续剧集片尾设置在 {int(credits_start / 60)}分{int(credits_start % 60)}秒 开始")
@@ -232,13 +232,13 @@ class AdaptiveIntroSkip(_PluginBase):
         # 批量标记新入库的剧集
         intro_end = chapter_info.get("intro_end")
         for next_episode_id in next_episode_ids:
-            update_intro(next_episode_id, intro_end, base_url, api_key)
+            update_intro(next_episode_id, intro_end, self._emby_host, self._emby_apikey)
         logger.info(
             f"【新集入库】{series_name} {event_info.season_episode} ，片头设置在 {int(intro_end / 60)}分{int(intro_end % 60)}秒 结束")
 
         credits_start = chapter_info.get("credits_start")
         for next_episode_id in next_episode_ids:
-            update_credits(next_episode_id, credits_start, base_url, api_key)
+            update_credits(next_episode_id, credits_start, self._emby_host, self._emby_apikey)
         logger.info(
             f"【新集入库】{series_name} {event_info.season_episode} ，片尾设置在 {int(credits_start / 60)}分{int(intro_end % 60)}秒 开始")
 
