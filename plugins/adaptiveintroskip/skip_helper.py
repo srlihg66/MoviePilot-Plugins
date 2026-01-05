@@ -1,18 +1,14 @@
 import requests
 from app.log import logger
 from datetime import datetime
-# 引用 __init__.py 里的插件实例
-from . import plugin_instance
 
-# 直接用插件实例的属性
-base_url = plugin_instance._emby_host
-api_key = plugin_instance._emby_apikey
+EMBY_HOST = None
+EMBY_API_KEY = None
+EMBY_HEADERS = None
 
-if base_url is None:
-    logger.error('Emby 服务未配置，请检查设置')
-headers = {
-    "X-Emby-Token": api_key
-}
+base_url = EMBY_HOST      
+api_key = EMBY_API_KEY     
+headers = EMBY_HEADERS   
 
 def format_time(seconds):
     # 将秒数转换为 datetime.timedelta 对象
