@@ -1,15 +1,15 @@
 import requests
 from app.log import logger
 from datetime import datetime
-from app.modules.emby.emby import Emby
+# 引用 __init__.py 里的插件实例
+from . import plugin_instance
 
-# Emby API 地址和授权标头
-base_url = Emby._host
-api_key = Emby._apikey
+# 直接用插件实例的属性
+base_url = plugin_instance._emby_host
+api_key = plugin_instance._emby_apikey
 
-if not base_url or not api_key:
-    logger.error("请配置 EMBY_HOST / EMBY_API_KEY")
-
+if base_url is None:
+    logger.error('Emby 服务未配置，请检查设置')
 headers = {
     "X-Emby-Token": api_key
 }
