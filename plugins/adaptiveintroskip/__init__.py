@@ -80,8 +80,8 @@ class AdaptiveIntroSkip(_PluginBase):
                 logger.info(f"获取到媒体服务器类型: {self._emby_server}")
                 logger.info(f"原始 host: {self._emby_host}")
                 logger.info(f"apikey: {self._emby_apikey}")
-                if self._emby_host.endswith("/"):
-                    self._emby_host = self._emby_host.rstrip("/")
+                if not self._emby_host.endswith("/"):
+                    self._emby_host += "/"
                 if not self._emby_host.startswith("http"):
                     self._emby_host = "http://" + self._emby_host
             self.stop_service()
