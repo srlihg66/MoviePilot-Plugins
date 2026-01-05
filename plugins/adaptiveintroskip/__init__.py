@@ -50,6 +50,8 @@ class AdaptiveIntroSkip(_PluginBase):
     _spec = ''
 
     def init_plugin(self, config: dict = None):
+        self._mediaserver_helper = MediaServerHelper()
+        self._mediaserver = None
         if config:
             self._enable = config.get("enable") or False
             self._mediaservers = config.get("mediaservers") or []
