@@ -242,150 +242,150 @@ class AdaptiveIntroSkip(_PluginBase):
         """
         拼装插件配置页面，需要返回两块数据：1、页面配置；2、数据结构
         """
-		return [
-			{
-				'component': 'VCard',
-				'props': {'variant': 'outlined', 'class': 'mb-3'},
-				'content': [
-					{
-						'component': 'VCardTitle',
-						'props': {'class': 'd-flex align-center'},
-						'content': [
-							{
-								'component': 'VIcon',
-								'props': {'icon': 'mdi-cog', 'color': 'primary', 'class': 'mr-2'},
-							},
-							{'component': 'span', 'text': '插件基础设置'}
-						]
-					},
-					{'component': 'VDivider'},
-					{
-						'component': 'VCardText',
-						'content': [
-							{
-								'component': 'VForm',
-								'content': [
-									{
-										'component': 'VRow',
-										'content': [
-											{
-												'component': 'VCol',
-												'props': {'cols': 12, 'md': 4},
-												'content': [
-													{'component': 'VSwitch', 'props': {'model': 'enable', 'label': '启用插件'}}
-												]
-											},
-											{
-												'component': 'VCol',
-												'props': {'cols': 12, 'md': 4},
-												'content': [
-													{'component': 'VTextField', 'props': {'model': 'begin_min', 'label': '片头最晚结束于（分:秒）', 'placeholder': '4'}}
-												]
-											},
-											{
-												'component': 'VCol',
-												'props': {'cols': 12, 'md': 4},
-												'content': [
-													{'component': 'VTextField', 'props': {'model': 'end_min', 'label': '片尾最早开始于最后（分:秒）', 'placeholder': '6'}}
-												]
-											}
-										]
-									},
-									{
-										'component': 'VRow',
-										'content': [
-											{
-												'component': 'VCol',
-												'props': {'cols': 12, 'md': 4},
-												'content': [
-													{'component': 'VTextField', 'props': {'model': 'user', 'label': '媒体库用户名', 'placeholder': '多个以,分隔 留空默认全部用户'}}
-												]
-											},
-											{
-												'component': 'VCol',
-												'props': {'cols': 12, 'md': 4},
-												'content': [
-													{'component': 'VTextField', 'props': {'model': 'exclude', 'label': '媒体路径排除关键词', 'placeholder': '多个关键词以,分隔'}}
-												]
-											},
-											{
-												'component': 'VCol',
-												'props': {'cols': 12, 'md': 4},
-												'content': [
-													{'component': 'VTextField', 'props': {'model': 'include', 'label': '媒体路径包含关键词', 'placeholder': '多个关键词以,分隔'}}
-												]
-											}
-										]
-									},
-									{
-										'component': 'VRow',
-										'content': [
-											{
-												'component': 'VCol',
-												'props': {'cols': 12, 'md': 12},
-												'content': [
-													{'component': 'VTextarea', 'props': {'model': 'spec', 'rows': 6, 'label': '特别指定开始结束时间段', 'placeholder': '关键词#分:秒#分:秒，*结尾为指定时间点'}}
-												]
-											}
-										]
-									},
-									{
-										'component': 'VRow',
-										'content': [
-											{
-												'component': 'VCol',
-												'props': {'cols': 12, 'md': 12},
-												'content': [
-													{'component': 'VSelect', 'props': {'multiple': True, 'chips': True, 'clearable': True, 'model': 'mediaservers', 'label': '媒体服务器', 'items': [
-														{'title': config.name, 'value': config.name} for config in self._mediaserver_helper.get_configs().values() if config.type in ['emby', 'jellyfin']
-													], 'hint': '可多选媒体服务器', 'persistent-hint': True}}
-												]
-											}
-										]
-									}
-								]
-							},
-							{
-								'component': 'VRow',
-								'content': [
-									{
-										'component': 'VCol',
-										'props': {'cols': 12},
-										'content': [
-											{'component': 'VAlert', 'props': {'type': 'warning', 'variant': 'tonal', 'text': 'Supported by ChapterAPI, 目前只支持Emby, Emby需要安装ChapterAPI插件，需要在emby通知中添加mp的回调webhook。v1.6遇到问题请重置插件'}}
-										]
-									},
-									{
-										'component': 'VCol',
-										'props': {'cols': 12},
-										'content': [
-											{'component': 'VAlert', 'props': {'type': 'success', 'variant': 'tonal', 'text': '在片头限定时间内，暂停一下恢复播放能够将后续剧集的片头跳转全标记在这个点，在片尾限定时间内，片尾正常退出播放能够将后续剧集的片尾开始全标记在这个点，如有问题欢迎交流。'}},
-											{'component': 'VAlert', 'props': {'type': 'success', 'variant': 'tonal', 'text': '目前回报暂停信息的只有emby官方的客户端(包括小秘)、网页端，所以只推荐这几个客户端的用户使用。'}}
-										]
-									},
-									{
-										'component': 'VCol',
-										'props': {'cols': 12},
-										'content': [
-											{'component': 'VAlert', 'props': {'type': 'info', 'variant': 'tonal', 'text': '具体安装使用说明见README https://github.com/honue/MoviePilot-Plugins'}}
-										]
-									}
-								]
-							}
-						]
-					}
-				]
-			}
-		], {
-			'enable': False,
-			'begin_min': '4',
-			'end_min': '6',
-			'include': '',
-			'exclude': '',
-			'spec': '',
-			'user': '',
-			'mediaservers': [],
-		}
+        return [
+            {
+                'component': 'VCard',
+                'props': {'variant': 'outlined', 'class': 'mb-3'},
+                'content': [
+                    {
+                        'component': 'VCardTitle',
+                        'props': {'class': 'd-flex align-center'},
+                        'content': [
+                            {
+                                'component': 'VIcon',
+                                'props': {'icon': 'mdi-cog', 'color': 'primary', 'class': 'mr-2'},
+                            },
+                            {'component': 'span', 'text': '插件基础设置'}
+                        ]
+                    },
+                    {'component': 'VDivider'},
+                    {
+                        'component': 'VCardText',
+                        'content': [
+                            {
+                                'component': 'VForm',
+                                'content': [
+                                    {
+                                        'component': 'VRow',
+                                        'content': [
+                                            {
+                                                'component': 'VCol',
+                                                'props': {'cols': 12, 'md': 4},
+                                                'content': [
+                                                    {'component': 'VSwitch', 'props': {'model': 'enable', 'label': '启用插件'}}
+                                                ]
+                                            },
+                                            {
+                                                'component': 'VCol',
+                                                'props': {'cols': 12, 'md': 4},
+                                                'content': [
+                                                    {'component': 'VTextField', 'props': {'model': 'begin_min', 'label': '片头最晚结束于（分:秒）', 'placeholder': '4'}}
+                                                ]
+                                            },
+                                            {
+                                                'component': 'VCol',
+                                                'props': {'cols': 12, 'md': 4},
+                                                'content': [
+                                                    {'component': 'VTextField', 'props': {'model': 'end_min', 'label': '片尾最早开始于最后（分:秒）', 'placeholder': '6'}}
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        'component': 'VRow',
+                                        'content': [
+                                            {
+                                                'component': 'VCol',
+                                                'props': {'cols': 12, 'md': 4},
+                                                'content': [
+                                                    {'component': 'VTextField', 'props': {'model': 'user', 'label': '媒体库用户名', 'placeholder': '多个以,分隔 留空默认全部用户'}}
+                                                ]
+                                            },
+                                            {
+                                                'component': 'VCol',
+                                                'props': {'cols': 12, 'md': 4},
+                                                'content': [
+                                                    {'component': 'VTextField', 'props': {'model': 'exclude', 'label': '媒体路径排除关键词', 'placeholder': '多个关键词以,分隔'}}
+                                                ]
+                                            },
+                                            {
+                                                'component': 'VCol',
+                                                'props': {'cols': 12, 'md': 4},
+                                                'content': [
+                                                    {'component': 'VTextField', 'props': {'model': 'include', 'label': '媒体路径包含关键词', 'placeholder': '多个关键词以,分隔'}}
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        'component': 'VRow',
+                                        'content': [
+                                            {
+                                                'component': 'VCol',
+                                                'props': {'cols': 12, 'md': 12},
+                                                'content': [
+                                                    {'component': 'VTextarea', 'props': {'model': 'spec', 'rows': 6, 'label': '特别指定开始结束时间段', 'placeholder': '关键词#分:秒#分:秒，*结尾为指定时间点'}}
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        'component': 'VRow',
+                                        'content': [
+                                            {
+                                                'component': 'VCol',
+                                                'props': {'cols': 12, 'md': 12},
+                                                'content': [
+                                                    {'component': 'VSelect', 'props': {'multiple': True, 'chips': True, 'clearable': True, 'model': 'mediaservers', 'label': '媒体服务器', 'items': [
+                                                        {'title': config.name, 'value': config.name} for config in self._mediaserver_helper.get_configs().values() if config.type in ['emby', 'jellyfin']
+                                                    ], 'hint': '可多选媒体服务器', 'persistent-hint': True}}
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                'component': 'VRow',
+                                'content': [
+                                    {
+                                        'component': 'VCol',
+                                        'props': {'cols': 12},
+                                        'content': [
+                                            {'component': 'VAlert', 'props': {'type': 'warning', 'variant': 'tonal', 'text': 'Supported by ChapterAPI, 目前只支持Emby, Emby需要安装ChapterAPI插件，需要在emby通知中添加mp的回调webhook。v1.6遇到问题请重置插件'}}
+                                        ]
+                                    },
+                                    {
+                                        'component': 'VCol',
+                                        'props': {'cols': 12},
+                                        'content': [
+                                            {'component': 'VAlert', 'props': {'type': 'success', 'variant': 'tonal', 'text': '在片头限定时间内，暂停一下恢复播放能够将后续剧集的片头跳转全标记在这个点，在片尾限定时间内，片尾正常退出播放能够将后续剧集的片尾开始全标记在这个点，如有问题欢迎交流。'}},
+                                            {'component': 'VAlert', 'props': {'type': 'success', 'variant': 'tonal', 'text': '目前回报暂停信息的只有emby官方的客户端(包括小秘)、网页端，所以只推荐这几个客户端的用户使用。'}}
+                                        ]
+                                    },
+                                    {
+                                        'component': 'VCol',
+                                        'props': {'cols': 12},
+                                        'content': [
+                                            {'component': 'VAlert', 'props': {'type': 'info', 'variant': 'tonal', 'text': '具体安装使用说明见README https://github.com/honue/MoviePilot-Plugins'}}
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ], {
+            'enable': False,
+            'begin_min': '4',
+            'end_min': '6',
+            'include': '',
+            'exclude': '',
+            'spec': '',
+            'user': '',
+            'mediaservers': [],
+        }
 
     def get_state(self) -> bool:
         return self._enable
