@@ -77,20 +77,14 @@ class AdaptiveIntroSkip(_PluginBase):
                 self._emby_server = emby_server.type
                 self._emby_apikey = emby_server.config.config.get("apikey")
                 self._emby_host = emby_server.config.config.get("host")
+                logger.info(f"获取到媒体服务器类型: {self._emby_server}")
+                logger.info(f"原始 host: {self._emby_host}")
+                logger.info(f"apikey: {self._emby_apikey}")
                 if self._emby_host.endswith("/"):
                     self._emby_host = self._emby_host.rstrip("/")
                 if not self._emby_host.startswith("http"):
                     self._emby_host = "http://" + self._emby_host
-                
-        try:
-            from .skip_helper import EMBY_HOST, EMBY_API_KEY, EMBY_HEADERS
-            EMBY_HOST = self._emby_host
-            EMBY_API_KEY = self._emby_apikey
-            EMBY_HEADERS = {'X-Emby-Token': self._emby_apikey}
-            logger.debug(f"设置 Emby 配置到 skip_helper: {EMBY_HOST}")
-        except Exception as e:
-            logger.error(f"设置 skip_helper Emby 配置失败: {e}")
-        self.stop_service()
+            self.stop_service()
 
     @eventmanager.register(EventType.WebhookMessage)
     def hook(self, event: Event):
@@ -136,8 +130,11 @@ class AdaptiveIntroSkip(_PluginBase):
 
         # 当前正在播放集的信息
         current_percentage = event_info.percentage
-        current_video_item_id = get_current_video_item_id(item_id=event_info.item_id, season_id=event_info.season_id,
-                                                          episode_id=event_info.episode_id)
+        current_video_item_id = get_current_video_item_id(item_id=event_info.item_id,
+                                                          season_id=event_info.season_id,
+                                                          episode_id=event_info.episode_id, 
+                                                          base_url=self._emby_host, 
+                                                          api_key=self._emby_apikey)
         total_sec = get_total_time(current_video_item_id)
         current_sec = int(current_percentage / 100 * total_sec)
 
@@ -149,7 +146,9 @@ class AdaptiveIntroSkip(_PluginBase):
         # 剧集在某集之后的所有剧集的item_id
         next_episode_ids = get_next_episode_ids(item_id=event_info.item_id,
                                                 season_id=event_info.season_id,
-                                                episode_id=event_info.episode_id
+                                                episode_id=event_info.episode_id,
+                                                base_url=self._emby_host, 
+                                                api_key=self._emby_apikey
                                                 )
         if next_episode_ids:
             # 存储最新片头位置，新集入库使用本数据
@@ -163,7 +162,7 @@ class AdaptiveIntroSkip(_PluginBase):
                 intro_end = self.trans_to_sec(begin_time) if manual else current_sec
                 # 批量标记之后的所有剧集，不影响已经看过的标记
                 for next_episode_id in next_episode_ids:
-                    update_intro(next_episode_id, intro_end)
+                    update_intro(next_episode_id, intro_end, base_url, api_key)
                 chapter_info['intro_end'] = intro_end
                 logger.info(
                     f"【恢复播放】{event_info.item_name} 后续剧集片头设置在 {int(intro_end / 60)}分{int(intro_end % 60)}秒 结束")
@@ -172,7 +171,7 @@ class AdaptiveIntroSkip(_PluginBase):
                     total_sec - self.trans_to_sec(end_time)) and event_info.event == 'playback.stop') or manual:
                 credits_start = (total_sec - self.trans_to_sec(end_time)) if manual else current_sec
                 for next_episode_id in next_episode_ids:
-                    update_credits(next_episode_id, credits_start)
+                    update_credits(next_episode_id, credits_start, base_url, api_key)
                 chapter_info['credits_start'] = credits_start
                 logger.info(
                     f"【退出播放】{event_info.item_name} 后续剧集片尾设置在 {int(credits_start / 60)}分{int(credits_start % 60)}秒 开始")
@@ -217,7 +216,9 @@ class AdaptiveIntroSkip(_PluginBase):
             # 新入库剧集的item_id
             next_episode_ids = get_next_episode_ids(item_id=chapter_info.get("item_id"),
                                                     season_id=event_info.begin_season,
-                                                    episode_id=event_info.begin_episode)
+                                                    episode_id=event_info.begin_episode, 
+                                                    base_url=self._emby_host, 
+                                                    api_key=self._emby_apikey)
             if next_episode_ids:
                 break
             cnt += 1
@@ -231,13 +232,13 @@ class AdaptiveIntroSkip(_PluginBase):
         # 批量标记新入库的剧集
         intro_end = chapter_info.get("intro_end")
         for next_episode_id in next_episode_ids:
-            update_intro(next_episode_id, intro_end)
+            update_intro(next_episode_id, intro_end, base_url, api_key)
         logger.info(
             f"【新集入库】{series_name} {event_info.season_episode} ，片头设置在 {int(intro_end / 60)}分{int(intro_end % 60)}秒 结束")
 
         credits_start = chapter_info.get("credits_start")
         for next_episode_id in next_episode_ids:
-            update_credits(next_episode_id, credits_start)
+            update_credits(next_episode_id, credits_start, base_url, api_key)
         logger.info(
             f"【新集入库】{series_name} {event_info.season_episode} ，片尾设置在 {int(credits_start / 60)}分{int(intro_end % 60)}秒 开始")
 
