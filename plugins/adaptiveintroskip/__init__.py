@@ -81,15 +81,15 @@ class AdaptiveIntroSkip(_PluginBase):
                     self._emby_host = self._emby_host.rstrip("/")
                 if not self._emby_host.startswith("http"):
                     self._emby_host = "http://" + self._emby_host
-        if self._emby_host:             
-            try:
-                from .skip_helper import EMBY_HOST, EMBY_API_KEY, EMBY_HEADERS
-                EMBY_HOST = self._emby_host
-                EMBY_API_KEY = self._emby_apikey
-                EMBY_HEADERS = {'X-Emby-Token': self._emby_apikey}
-                logger.debug(f"设置 Emby 配置到 skip_helper: {EMBY_HOST}")
-            except Exception as e:
-                logger.error(f"设置 skip_helper Emby 配置失败: {e}")
+                
+        try:
+            from .skip_helper import EMBY_HOST, EMBY_API_KEY, EMBY_HEADERS
+            EMBY_HOST = self._emby_host
+            EMBY_API_KEY = self._emby_apikey
+            EMBY_HEADERS = {'X-Emby-Token': self._emby_apikey}
+            logger.debug(f"设置 Emby 配置到 skip_helper: {EMBY_HOST}")
+        except Exception as e:
+            logger.error(f"设置 skip_helper Emby 配置失败: {e}")
         self.stop_service()
 
     @eventmanager.register(EventType.WebhookMessage)
